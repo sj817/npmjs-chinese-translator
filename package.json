@@ -1,6 +1,6 @@
 {
   "name": "npmjs-chinese-translator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "将 npmjs.com 网站翻译为中文的油猴 (Tampermonkey) 脚本",
   "main": "dist/npmjs-chinese-translator.user.js",
   "repository": {
