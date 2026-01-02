@@ -34,6 +34,11 @@ export const translationRules: TranslationRule[] = [
   ['Search', '搜索'],
   ['Downloads · Last Week', '下载量 · 上周'],
   ['Downloads · Last Month', '下载量 · 上月'],
+
+  // 顶部横幅通知
+  ['Security Update', '安全更新'],
+  [': Classic tokens have been revoked. Granular tokens are now limited to 90 days and require 2FA by default. Update your CI/CD workflows to avoid disruption.', '：经典令牌已被撤销。细粒度令牌现在限制为 90 天，并默认要求双重验证。请更新您的 CI/CD 工作流以避免中断。'],
+  ['Learn more', '了解更多'],
   ['Front-end', '前端'],
   ['Back-end', '后端'],
   ['CLI', '命令行工具'],
@@ -70,6 +75,56 @@ export const translationRules: TranslationRule[] = [
   ['Teams', '团队'],
   ['Pricing', '价格'],
 
+  // 汉堡菜单 / 用户菜单
+  ['Profile', '个人资料'],
+  ['Edit Profile', '编辑个人资料'],
+  ['Account', '账户'],
+  ['Billing Info', '账单信息'],
+  ['Access Tokens', '访问令牌'],
+  ['Organizations', '组织'],
+  ['Add Organization', '添加组织'],
+  ['Sign Out', '退出登录'],
+
+  // 访问令牌页面
+  ['Name', '名称'],
+  ['Bypass 2FA', '跳过双重验证'],
+  ['Created', '创建时间'],
+  ['Last used', '最后使用'],
+  ['Expires', '过期时间'],
+  ['Delete', '删除'],
+  ['Select all', '全选'],
+  ['Generate New Token', '生成新令牌'],
+  ['Delete Selected Tokens', '删除所选令牌'],
+  ['Rows', '第'],
+  ['to', '至'],
+  ['of', '行，共'],
+  ['📋 Read the Documentation', '📋 阅读文档'],
+
+  // 账户设置页面
+  ['Account Settings', '账户设置'],
+  ['Profile Picture', '头像'],
+  ['Email & Password', '邮箱和密码'],
+  ['This email will be added to the metadata of packages you publish', '此邮箱将被添加到您发布的包的元数据中'],
+  ['Two-Factor Authentication', '双重身份验证'],
+  ['Enabled for authorization and publishing', '已启用授权和发布验证'],
+  ['Authenticator app', '身份验证器应用'],
+  ['security', '安全'],
+  ['keys', '密钥'],
+  ['Linked Accounts & Recovery Option', '关联账户和恢复选项'],
+  ['You can link existing or new accounts to help us verify your identity in the case of account recovery. Linked accounts will show up on your profile page.', '您可以关联现有或新账户，以便在账户恢复时帮助我们验证您的身份。关联的账户将显示在您的个人资料页面上。'],
+  ['Delete Account', '删除账户'],
+  ['Once you delete your account, you will lose access to your packages. Please be certain.', '一旦删除账户，您将无法访问您的包。请慎重考虑。'],
+  ['Change your Gravatar', '更改您的 Gravatar 头像'],
+  ['Change email', '更改邮箱'],
+  ['Change password', '更改密码'],
+  ['Save', '保存'],
+  ['Discard Changes', '放弃更改'],
+  ['Modify 2FA', '修改双重验证'],
+  ['Link with GitHub', '关联 GitHub'],
+  ['Delete your account', '删除您的账户'],
+  ['Link your social accounts in the', '在'],
+  ['to make them visible to others.', '中关联您的社交账户，让其他人可以看到。'],
+
   // 包详情页
   ['Install', '安装'],
   ['Repository', '仓库'],
@@ -101,6 +156,7 @@ export const translationRules: TranslationRule[] = [
   // 版本相关
   ['Versions', '版本'],
   ['View all', '查看全部'],
+  ['View →', '查看 →'],
   ['latest', '最新'],
   ['beta', '测试版'],
   ['alpha', '预览版'],
@@ -111,6 +167,7 @@ export const translationRules: TranslationRule[] = [
   ['Quality', '质量'],
   ['Maintenance', '维护'],
   ['Optimal', '最优'],
+  ['show more packages', '显示更多包'],
 
   // 包信息
   ['published', '发布于'],
@@ -138,9 +195,28 @@ export const translationRules: TranslationRule[] = [
   // ==================== 正则表达式规则 ====================
   // 格式：[正则表达式, 翻译文本]
   // 特点：灵活匹配，支持捕获组，需谨慎使用
-  // 示例：
-  // [/(\d+)\s+downloads?/gi, '$1 次下载'],
-  // [/(\d+)\s+(day|week|month|year)s?\s+ago/gi, '$1 $2前'],
+
+  // 时间相关
+  [/(\d+)\s+days?\s+ago/gi, '$1 天前'],
+  [/(\d+)\s+hours?\s+ago/gi, '$1 小时前'],
+  [/(\d+)\s+minutes?\s+ago/gi, '$1 分钟前'],
+  [/(\d+)\s+weeks?\s+ago/gi, '$1 周前'],
+  [/(\d+)\s+months?\s+ago/gi, '$1 个月前'],
+  [/(\d+)\s+years?\s+ago/gi, '$1 年前'],
+
+  // 日期格式 (如 Nov 29, 2025)
+  [/Jan\s+(\d+),\s+(\d+)/gi, '$2年1月$1日'],
+  [/Feb\s+(\d+),\s+(\d+)/gi, '$2年2月$1日'],
+  [/Mar\s+(\d+),\s+(\d+)/gi, '$2年3月$1日'],
+  [/Apr\s+(\d+),\s+(\d+)/gi, '$2年4月$1日'],
+  [/May\s+(\d+),\s+(\d+)/gi, '$2年5月$1日'],
+  [/Jun\s+(\d+),\s+(\d+)/gi, '$2年6月$1日'],
+  [/Jul\s+(\d+),\s+(\d+)/gi, '$2年7月$1日'],
+  [/Aug\s+(\d+),\s+(\d+)/gi, '$2年8月$1日'],
+  [/Sep\s+(\d+),\s+(\d+)/gi, '$2年9月$1日'],
+  [/Oct\s+(\d+),\s+(\d+)/gi, '$2年10月$1日'],
+  [/Nov\s+(\d+),\s+(\d+)/gi, '$2年11月$1日'],
+  [/Dec\s+(\d+),\s+(\d+)/gi, '$2年12月$1日'],
 ]
 
 /**
