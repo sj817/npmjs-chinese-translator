@@ -1,2 +1,11 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# 排除开发服务器文件的语言统计
+dev-server/* linguist-vendored
+
+# 排除构建输出
+dist/* linguist-generated
+
+# 排除锁文件
+pnpm-lock.yaml linguist-generated
