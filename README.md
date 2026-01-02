@@ -24,7 +24,11 @@
 
 ### 2. 安装脚本
 
-运行 `pnpm build` 后，将 `dist/npmjs-chinese-translator.user.js` 的内容复制到 Tampermonkey 新建脚本中保存即可。
+点击下方链接直接安装（始终指向最新版本）：
+
+**[📥 点击安装脚本](https://github.com/sj817/npmjs-chinese-translator/releases/latest/download/npmjs-chinese-translator.user.js)**
+
+或者访问 [Releases 页面](https://github.com/sj817/npmjs-chinese-translator/releases) 下载特定版本。
 
 ### 3. 使用
 
