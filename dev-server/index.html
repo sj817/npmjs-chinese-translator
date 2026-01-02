@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NPM 翻译脚本 - 开发控制台</title>
+  <style>
+    :root {
+      --bg-color: #f5f5f7;
+      --card-bg: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #86868b;
+      --accent-color: #0071e3;
+      --accent-hover: #0077ed;
+      --border-color: #d2d2d7;
+
+      /* 日志窗口专用变量 - 默认深色更有极客感 */
+      --term-bg: #1e1e1e;
+      --term-header: #2d2d2d;
+      --term-text: #d4d4d4;
+      --term-border: #333;
+
+      --success: #34c759;
+      --warning: #ff9f0a;
+      --error: #ff3b30;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --btn-radius: 12px;
+      --card-radius: 24px;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #000000;
+      --card-bg: #1c1c1e;
+      --text-primary: #f5f5f7;
+      --text-secondary: #86868b;
+      --accent-color: #0a84ff;
+      --accent-hover: #0071e3;
+      --border-color: #38383a;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .main-wrapper {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding: 48px;
+      position: relative;
+    }
+
+    /* Header Area */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+    }
+
+    .title-group h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--bg-color);
+      transform: translateY(-1px);
+    }
+
+    /* Status Grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .status-item {
+      background-color: var(--bg-color);
+      padding: 20px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid transparent;
+    }
+
+    [data-theme="dark"] .status-item {
+      border-color: var(--border-color);
+    }
+
+    .status-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-value {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--text-secondary);
+      position: relative;
+    }
+
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      opacity: 0.2;
+      background-color: inherit;
+    }
+
+    .status-dot.success {
+      background-color: var(--success);
+    }
+
+    .status-dot.warning {
+      background-color: var(--warning);
+    }
+
+    .status-dot.error {
+      background-color: var(--error);
+    }
+
+    /* Actions */
+    .actions {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      padding: 18px;
+      border-radius: 16px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      box-shadow: 0 6px 16px rgba(0, 113, 227, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      border: 1px solid transparent;
+    }
+
+    [data-theme="dark"] .btn-secondary {
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border-color);
+      transform: translateY(-1px);
+    }
+
+    /* Terminal Window */
+    .terminal-window {
+      background-color: var(--term-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--term-border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-header {
+      background-color: var(--term-header);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--term-border);
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 8px;
+      margin-right: 16px;
+    }
+
+    .control-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .control-dot.red {
+      background-color: #ff5f56;
+    }
+
+    .control-dot.yellow {
+      background-color: #ffbd2e;
+    }
+
+    .control-dot.green {
+      background-color: #27c93f;
+    }
+
+    .terminal-title {
+      color: #888;
+      font-size: 13px;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-weight: 500;
+      flex: 1;
+      text-align: center;
+      margin-right: 50px;
+      /* Balance the controls */
+    }
+
+    .log-container {
+      padding: 24px;
+      font-family: "JetBrains Mono", "Fira Code", "SF Mono", "Menlo", monospace;
+      font-size: 13px;
+      height: 320px;
+      overflow-y: auto;
+      color: var(--term-text);
+      line-height: 1.6;
+    }
+
+    .log-entry {
+      margin-bottom: 6px;
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .log-time {
+      color: #666;
+      margin-right: 16px;
+      min-width: 70px;
+      font-size: 12px;
+      user-select: none;
+    }
+
+    .log-msg {
+      word-break: break-all;
+    }
+
+    .log-msg.success {
+      color: #4ec9b0;
+    }
+
+    .log-msg.error {
+      color: #f48771;
+    }
+
+    .log-msg.warning {
+      color: #dcdcaa;
+    }
+
+    .log-msg.info {
+      color: #9cdcfe;
+    }
+
+    /* Footer & Info */
+    .footer-info {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .footer-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .copyright {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      opacity: 0.6;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #444;
+      border-radius: 5px;
+      border: 2px solid var(--term-bg);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #555;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 113, 227, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 12px rgba(0, 113, 227, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 113, 227, 0);
+      }
+    }
+
+    .pulsing {
+      animation: pulse 2s infinite;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px;
+      }
+
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .window-controls {
+        display: none;
+      }
+
+      .terminal-title {
+        text-align: left;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <div class="container">
+      <div class="header">
+        <div class="title-group">
+          <h1>NPM 翻译脚本</h1>
+          <div class="subtitle">开发服务器 & 构建监控</div>
+        </div>
+        <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+          <span id="themeIcon">🌓</span>
+          <span id="themeText">跟随系统</span>
+        </button>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-item">
+          <span class="status-label">构建状态</span>
+          <div class="status-value">
+            <span class="status-dot" id="buildStatus"></span>
+            <span id="buildStatusText">初始化...</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <span class="status-label">文件监控</span>
+          <div class="status-value">
+            <span class="status-dot" id="fileStatus"></span>
+            <span id="fileStatusText">等待中...</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <span class="status-label">服务器</span>
+          <div class="status-value">
+            <span class="status-dot success" id="serverStatus"></span>
+            <span id="serverStatusText">运行中</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="installBtn" onclick="installScript()">
+          <span>📥 安装最新版本</span>
+        </button>
+        <button class="btn btn-secondary" onclick="openNpmjs()">
+          <span>🌐 打开 NPM</span>
+        </button>
+      </div>
+
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div class="window-controls">
+            <div class="control-dot red"></div>
+            <div class="control-dot yellow"></div>
+            <div class="control-dot green"></div>
+          </div>
+          <div class="terminal-title">开发服务器 — 日志终端</div>
+        </div>
+        <div class="log-container" id="log">
+          <!-- Logs will appear here -->
+        </div>
+      </div>
+
+      <div class="footer-info">
+        <h3>💡 开发指南</h3>
+        <p>修改 <code>src/</code> 目录下的文件，Vite 会自动重新构建检测到新版本后，点击上方“安装最新版本”即可在 Tampermonkey 中更新脚本无需手动刷新浏览器</p>
+      </div>
+    </div>
+
+    <div class="copyright">
+      &copy; 2025 shijin. Released under the MIT License.<br>
+      Powered by Vite & Express
+    </div>
+  </div>
+
+  <script>
+    // Theme Management
+    const themes = ['auto', 'light', 'dark']
+    let currentTheme = localStorage.getItem('theme') || 'auto'
+
+    function updateThemeUI () {
+      const root = document.documentElement
+      const btnText = document.getElementById('themeText')
+      const btnIcon = document.getElementById('themeIcon')
+
+      if (currentTheme === 'auto') {
+        const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (isSystemDark) root.setAttribute('data-theme', 'dark')
+        else root.removeAttribute('data-theme')
+        btnText.textContent = '跟随系统'
+        btnIcon.textContent = '🌓'
+      } else {
+        if (currentTheme === 'dark') root.setAttribute('data-theme', 'dark')
+        else root.removeAttribute('data-theme')
+        btnText.textContent = currentTheme === 'light' ? '浅色模式' : '深色模式'
+        btnIcon.textContent = currentTheme === 'light' ? '☀️' : '🌙'
+      }
+      localStorage.setItem('theme', currentTheme)
+    }
+
+    function toggleTheme () {
+      const currentIndex = themes.indexOf(currentTheme)
+      const nextIndex = (currentIndex + 1) % themes.length
+      currentTheme = themes[nextIndex]
+      updateThemeUI()
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (currentTheme === 'auto') updateThemeUI()
+    })
+    updateThemeUI()
+
+    // Core Logic
+    let lastModified = 0
+
+    function addLog (message, type = 'info') {
+      const log = document.getElementById('log')
+      const entry = document.createElement('div')
+      entry.className = 'log-entry'
+
+      const time = document.createElement('span')
+      time.className = 'log-time'
+      time.textContent = new Date().toLocaleTimeString('en-US', { hour12: false })
+
+      const msg = document.createElement('span')
+      msg.className = `log-msg ${type}`
+      msg.textContent = message
+
+      entry.appendChild(time)
+      entry.appendChild(msg)
+      log.appendChild(entry)
+      log.scrollTop = log.scrollHeight
+    }
+
+    function updateStatus (elementId, status, text) {
+      const statusDot = document.getElementById(elementId)
+      const statusText = document.getElementById(elementId + 'Text')
+      statusDot.className = `status-dot ${status}`
+      if (text) statusText.textContent = text
+    }
+
+    async function checkBuildStatus () {
+      try {
+        const response = await fetch('/script/latest?t=' + Date.now(), {
+          cache: 'no-cache',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        })
+        const data = await response.json()
+
+        if (data.modified !== lastModified && lastModified !== 0) {
+          addLog('✨ 检测到新构建！可以安装了', 'success')
+          updateStatus('buildStatus', 'success', '构建完成')
+          document.getElementById('installBtn').classList.add('pulsing')
+        }
+
+        if (lastModified === 0) {
+          if (data.exists) {
+            addLog('🚀 已连接到构建输出', 'success')
+            updateStatus('buildStatus', 'success', '就绪')
+            updateStatus('fileStatus', 'success', '监控中')
+          } else {
+            updateStatus('buildStatus', 'warning', '构建中...')
+            updateStatus('fileStatus', 'warning', '等待中...')
+          }
+        }
+        lastModified = data.modified
+      } catch (error) {
+        addLog('连接断开: ' + error.message, 'error')
+        updateStatus('buildStatus', 'error', '已断开')
+      }
+    }
+
+    function installScript () {
+      const btn = document.getElementById('installBtn')
+      btn.classList.remove('pulsing')
+      addLog('📥 正在打开安装页面...', 'info')
+      window.open('/npmjs-chinese-translator.user.js?t=' + Date.now(), '_blank')
+    }
+
+    function openNpmjs () {
+      window.open('https://www.npmjs.com', '_blank')
+      addLog('🌐 正在打开 npmjs.com...', 'info')
+    }
+
+    addLog('💻 开发服务器已连接')
+    checkBuildStatus()
+    setInterval(checkBuildStatus, 2000);
+  </script>
+</body>
+
+</html>

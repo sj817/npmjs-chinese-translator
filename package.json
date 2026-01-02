@@ -1,0 +1,37 @@
+{
+  "name": "npmjs-chinese-translator",
+  "version": "1.0.0",
+  "description": "将 npmjs.com 网站翻译为中文的油猴 (Tampermonkey) 脚本",
+  "main": "dist/npmjs-chinese-translator.user.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sj817/npmjs-chinese-translator"
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:watch": "vite build --watch",
+    "dev:server": "node dev-server/server.js",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "preview": "vite preview",
+    "preview:csp": "node scripts/preview-csp.js"
+  },
+  "keywords": [
+    "tampermonkey",
+    "userscript",
+    "npmjs",
+    "translation",
+    "chinese"
+  ],
+  "author": "shijin",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "chokidar": "^5.0.0",
+    "express": "^5.1.0",
+    "neostandard": "^0.12.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vite-plugin-monkey": "^7.1.5"
+  }
+}
