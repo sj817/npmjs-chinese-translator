@@ -29,10 +29,5 @@ export default defineConfig({
   ],
   build: {
     minify: false,
-    // watch 模式配置
-    watch: {
-      // 包含所有需要监听的文件
-      include: 'src/**',
-    },
   },
 })
