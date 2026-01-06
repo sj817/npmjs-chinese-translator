@@ -238,6 +238,22 @@ export const translationRules: TranslationRule[] = [
   ['GitHub', 'GitHub'],
   ['Twitter', 'Twitter'],
 
+  // 登录 注册
+  ['Username', '用户名'],
+  ['Password', '密码'],
+  ['Forgot password', '忘记密码'],
+  ['Show', '显示'],
+  ['Hide', '隐藏'],
+  ['Create Account', '创建账户'],
+  ['Please enter a password.', '请输入密码'],
+  ['username or password was invalid.', '用户名或密码无效。'],
+  ['Email address', '邮箱地址'],
+  ['Your email address will be added to the metadata of packages that you publish, so it may be seen publicly.', '您的邮箱地址将被添加到您发布的包的元数据中，因此可能会被公开查看。'],
+  ['Minimum of 10 characters and must meet our password guidelines.', '至少 10 个字符，并且必须符合我们的密码指南。'],
+  ['I agree to the End User License Agreement and Privacy Policy.', '我同意最终用户许可协议和隐私政策。'],
+  ['Verify you are a human', '验证您是人类'],
+  ['Create an account', '创建账户'],
+  ['Already have an account?', '已经有账户？'],
   // ==================== 正则表达式规则 ====================
   // 格式：[正则表达式, 翻译文本]
   // 特点：灵活匹配，支持捕获组，需谨慎使用
